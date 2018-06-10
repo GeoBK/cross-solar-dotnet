@@ -24,42 +24,52 @@ namespace CrossSolar.Controllers
         }
 
         // GET panel/XXXX1111YYYY2222/analytics
-        [HttpGet("{banelId}/[controller]")]
+        [Route("{panelId}/[controller]")]
+        [HttpGet]
         public async Task<IActionResult> Get([FromRoute] string panelId)
         {
-            var panel = await _panelRepository.Query()
-                .FirstOrDefaultAsync(x => x.Serial.Equals(panelId, StringComparison.CurrentCultureIgnoreCase));
+            
+                var panel = _panelRepository.GetPanelsByPanelId(panelId);
+                //.FirstOrDefaultAsync(x => x.Serial.Equals(panelId, StringComparison.CurrentCultureIgnoreCase));
+                
 
-            if (panel == null) return NotFound();
+                if (panel == null) return Ok();
 
             var analytics = await _analyticsRepository.Query()
-                .Where(x => x.PanelId.Equals(panelId, StringComparison.CurrentCultureIgnoreCase)).ToListAsync();
+                    .Where(x => x.PanelId.Equals(panelId, StringComparison.CurrentCultureIgnoreCase)).ToListAsync();
 
-            var result = new OneHourElectricityListModel
-            {
-                OneHourElectricitys = analytics.Select(c => new OneHourElectricityModel
+                var result = new OneHourElectricityListModel
                 {
-                    Id = c.Id,
-                    KiloWatt = c.KiloWatt,
-                    DateTime = c.DateTime
-                })
-            };
+                    OneHourElectricitys = analytics.Select(c => new OneHourElectricityModel
+                    {
+                        Id = c.Id,
+                        KiloWatt = c.KiloWatt,
+                        DateTime = c.DateTime
+                    })
+                };
+                return Ok(result);
+            
+            
 
-            return Ok(result);
+            
+            
         }
 
         // GET panel/XXXX1111YYYY2222/analytics/day
-        [HttpGet("{panelId}/[controller]/day")]
+        [Route("{panelId}/[controller]/day")]
+        [HttpGet]
         public async Task<IActionResult> DayResults([FromRoute] string panelId)
         {
             var result = new List<OneDayElectricityModel>();
 
+            result = _analyticsRepository.GetOneDayMetrics(panelId);
             return Ok(result);
         }
 
         // POST panel/XXXX1111YYYY2222/analytics
-        [HttpPost("{panelId}/[controller]")]
-        public async Task<IActionResult> Post([FromRoute] string panelId, [FromBody] OneHourElectricityModel value)
+        [Route("{panelId}/[controller]")]
+        [HttpPost]
+        public async Task<IActionResult> Post([FromRoute] string panelId, OneHourElectricityModel value)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 

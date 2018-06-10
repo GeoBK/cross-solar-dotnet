@@ -2,11 +2,12 @@
 using CrossSolar.Domain;
 using CrossSolar.Models;
 using CrossSolar.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrossSolar.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class PanelController : Controller
     {
         private readonly IPanelRepository _panelRepository;
@@ -17,8 +18,8 @@ namespace CrossSolar.Controllers
         }
 
         // POST api/panel
-        [HttpPost]
-        public async Task<IActionResult> Register([FromBody] PanelModel value)
+        [HttpPost]             
+        public async Task<IActionResult> Register(PanelModel value)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -33,6 +34,13 @@ namespace CrossSolar.Controllers
             await _panelRepository.InsertAsync(panel);
 
             return Created($"panel/{panel.Id}", panel);
+        }
+
+        [HttpGet]        
+        [Route("test")]
+        public ActionResult test()
+        {
+            return Json(new { hi = "hi" });
         }
     }
 }

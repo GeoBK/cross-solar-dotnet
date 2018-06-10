@@ -42,5 +42,7 @@ namespace CrossSolar.Tests.Controller
             Assert.NotNull(createdResult);
             Assert.Equal(201, createdResult.StatusCode);
         }
+
+
     }
 }

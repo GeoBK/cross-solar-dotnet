@@ -8,5 +8,6 @@ namespace CrossSolar.Repository
         {
             _dbContext = dbContext;
         }
+        
     }
 }

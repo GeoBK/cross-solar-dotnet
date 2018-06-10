@@ -44,6 +44,13 @@ namespace CrossSolar
             }
 
             app.UseMvc();
+            //routes =>
+            //{
+            //    routes.MapRoute(
+            //        name: "default",
+            //        template: "{controller}/{action}",
+            //        defaults: new { controller = "Panel", action = "Register" });
+            //}
         }
     }
 }

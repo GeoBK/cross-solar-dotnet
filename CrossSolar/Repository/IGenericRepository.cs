@@ -1,3 +1,5 @@
+using CrossSolar.Domain;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -5,12 +7,18 @@ namespace CrossSolar.Repository
 {
     public interface IGenericRepository<T>
     {
-        Task<T> GetAsync(string id);
+        Task<T> GetAsync(int id);
 
         IQueryable<T> Query();
 
         Task InsertAsync(T entity);
 
         Task UpdateAsync(T entity);
+
+        List<Panel> GetPanelsByPanelId(string panelId);
+
+        List<OneDayElectricityModel> GetOneDayMetrics(string panelId);
+
+
     }
 }
